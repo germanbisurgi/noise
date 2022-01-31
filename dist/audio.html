@@ -1,34 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Audio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="./assets/images/favicon.png" type="image/gif" sizes="16x16">
-  <link rel="stylesheet" href="./assets/css/main.css">
+    <meta charset="UTF-8">
+    <title>Audio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="./assets/images/favicon.png" type="image/gif" sizes="16x16">
+    <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
 <div id="app">
 
-  <div class="loading" v-if="loader && loader.loading()">
-    <p class="loading-progress"> {{ loader.getProgress() }}%</p>
-  </div>
+    <div class="loading" v-if="loader && loader.loading()">
+        <p class="loading-progress"> {{ loader.getProgress() }}%</p>
+    </div>
 
-  <div class="audio-chains" v-if="audio">
-    <div v-for="chain in audio.getChains()" class="audio-chain">
-      <div v-for="node in chain" class="node">
-        <p>{{ node.type }}</p>
-
-        <div v-if="node.type === 'source'">
-          <button @click="node.play(true, true)">Play</button>
-        </div>
-
-        <div v-if="node.type === 'gain'" >
-          <input v-if="node.type === 'gain'" type="range" min="0" max="1" step="0.01" :value="node.getGain()" @input="node.setGain($event.target.value)">
-        </div>
+    <div class="sounds">
+      <div class="sound" v-for="sound in sounds">
+        <p class="sound-name">{{ sound.name }}</p>
+        <input type="range" min="0" max="1" step="0.01" v-model="sound.volume" @input="sound.gain.setGain($event.target.value)">
       </div>
     </div>
+  <div class="sound">
+    <p class="sound-name">master</p>
+    <input type="range" min="0" max="1" step="0.01" value="master.getGain()" @input="master.setGain($event.target.value)">
   </div>
+
+</div>
 </div>
 <script src="././assets/js/vue.min.js"></script>
 <script src="././assets/js/naive.js"></script>
@@ -39,9 +36,11 @@
       loader: null,
       machines: null,
       audio: null,
-      loop: null
+      loop: null,
+      master: null,
+      sounds: []
     },
-    mounted () {
+    mounted() {
       this.start()
     },
     methods: {
@@ -56,21 +55,46 @@
         })
         this.machines.create('load', {
           load: (machine) => {
-            this.loader.add('audio-buffer', 'snare', '././assets/audio/brown.wav')
+            this.loader.add('audio-buffer', 'brown', '././assets/audio/brown.wav')
+            this.loader.add('audio-buffer', 'water', '././assets/audio/water.wav')
+            this.loader.add('audio-buffer', 'pink', '././assets/audio/pink.wav')
             this.loader.load()
             machine.transition('loading')
           },
           loading: (machine) => {
             if (this.loader.ready()) {
-              machine.transition('append')
+              machine.transition('create')
             }
           },
-          append: (machine) => {
-            this.loader.getByType('audio-buffer').forEach((asset) => {
-              this.audio.createNodeChain([
-                this.audio.createSourceNode(asset),
-                this.audio.createGainNode()
-              ])
+          create: (machine) => {
+            this.master = this.audio.createGainNode()
+            this.master.setGain(0.5)
+
+            this.sounds = [
+              {
+                name: 'brown',
+                source: this.audio.createSourceNode(this.loader.get('brown')),
+                gain: this.audio.createGainNode(),
+                volume: 0.5
+              },
+              {
+                name: 'water',
+                source: this.audio.createSourceNode(this.loader.get('water')),
+                gain: this.audio.createGainNode(),
+                volume: 0
+              },
+              {
+                name: 'pink',
+                source: this.audio.createSourceNode(this.loader.get('pink')),
+                gain: this.audio.createGainNode(),
+                volume: 0
+              }
+            ]
+
+            this.sounds.forEach((sound) => {
+              this.audio.connectNodes([sound.source, sound.gain, this.master])
+              sound.gain.setGain(sound.volume)
+              sound.source.play(true, true)
             })
             machine.exit()
           }
