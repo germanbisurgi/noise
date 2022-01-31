@@ -6,7 +6,8 @@
   "author": "g.bisurgi <g.bisurgi@herzogkommunikation.de>",
   "license": "MIT",
   "scripts": {
-    "serve": "live-server ./dist"
+    "serve": "live-server ./dist",
+    "sync-android": "npx cap sync android"
   },
   "dependencies": {
     "@capacitor/android": "^3.4.0",

@@ -20,7 +20,7 @@
         <p>{{ node.type }}</p>
 
         <div v-if="node.type === 'source'">
-          <button @click="node.play(true)">Play</button>
+          <button @click="node.play(true, true)">Play</button>
         </div>
 
         <div v-if="node.type === 'gain'" >
