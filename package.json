@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "serve": "live-server ./dist",
-    "sync-android": "npx cap sync android"
+    "sync-android": "npx cap sync android",
+    "open-android": "npx cap open android"
   },
   "dependencies": {
     "@capacitor/android": "^3.4.0",
