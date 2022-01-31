@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="./assets/images/favicon.png" type="image/gif" sizes="16x16">
+  <link rel="stylesheet" href="./assets/css/main.css">
+</head>
+<body>
+<div id="app">
+
+  <div class="loading" v-if="loader && loader.loading()">
+    <p class="loading-progress"> {{ loader.getProgress() }}%</p>
+  </div>
+
+  <div class="audio-chains" v-if="audio">
+    <div v-for="chain in audio.getChains()" class="audio-chain">
+      <div v-for="node in chain" class="node">
+        <p>{{ node.type }}</p>
+
+        <div v-if="node.type === 'source'">
+          <button @click="node.play(true)">Play</button>
+        </div>
+
+        <div v-if="node.type === 'gain'" >
+          <input v-if="node.type === 'gain'" type="range" min="0" max="1" step="0.01" :value="node.getGain()" @input="node.setGain($event.target.value)">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="././assets/js/vue.min.js"></script>
+<script src="././assets/js/naive.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      loader: null,
+      machines: null,
+      audio: null,
+      loop: null
+    },
+    mounted () {
+      this.start()
+    },
+    methods: {
+      start() {
+        this.loader = new Naive.Loader()
+        this.machines = new Naive.Machines()
+        this.audio = new Naive.Audio()
+        this.loop = new Naive.UpdateLoop(10, () => {
+          this.loader.update()
+          this.machines.update()
+          this.audio.update()
+        })
+        this.machines.create('load', {
+          load: (machine) => {
+            this.loader.add('audio-buffer', 'snare', '././assets/audio/brown.wav')
+            this.loader.load()
+            machine.transition('loading')
+          },
+          loading: (machine) => {
+            if (this.loader.ready()) {
+              machine.transition('append')
+            }
+          },
+          append: (machine) => {
+            this.loader.getByType('audio-buffer').forEach((asset) => {
+              this.audio.createNodeChain([
+                this.audio.createSourceNode(asset),
+                this.audio.createGainNode()
+              ])
+            })
+            machine.exit()
+          }
+        })
+      }
+    }
+  })
+</script>
+</body>
+</html>

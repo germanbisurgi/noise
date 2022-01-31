@@ -1,0 +1,6 @@
+{
+  "appId": "com.germanbisurgi.noise",
+  "appName": "noise",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
