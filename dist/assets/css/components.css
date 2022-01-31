@@ -18,8 +18,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto;
     padding: 30px 0;
-    width: 100%;
+    width: 50%;
 }
 
 .sound-name {
@@ -62,7 +63,6 @@ input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
-    animate: 0.2s;
     box-shadow: 1px 1px 1px #000000;
     background: #AC51B5;
     border-radius: 5px;
@@ -86,7 +86,6 @@ input[type=range]::-moz-range-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
-    animate: 0.2s;
     box-shadow: 1px 1px 1px #000000;
     background: #AC51B5;
     border-radius: 5px;
@@ -105,7 +104,6 @@ input[type=range]::-ms-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
-    animate: 0.2s;
     background: transparent;
     border-color: transparent;
     color: transparent;
