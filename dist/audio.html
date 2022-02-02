@@ -10,7 +10,7 @@
 <body>
 <div id="app">
     <div class="container">
-        <div class="loading" v-if="loader && loader.loading()">
+        <div class="loading" :class="{ visible: loader.loading() }" v-if="loader">
             <p class="loading-progress"> {{ loader.getProgress() }}%</p>
         </div>
 
@@ -25,7 +25,6 @@
         <input type="range" min="0" max="1" step="0.01" value="master.getGain()" @input="master.setGain($event.target.value)">
       </div>
     </div>
-</div>
 </div>
 <script src="././assets/js/vue.min.js"></script>
 <script src="././assets/js/naive.js"></script>
