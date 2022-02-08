@@ -8,11 +8,17 @@
   "scripts": {
     "serve": "live-server ./dist",
     "sync-android": "npx cap sync android",
-    "open-android": "npx cap open android"
+    "open-android": "npx cap open android",
+    "res-android": "cordova-res android --skip-config --copy",
+    "open-ios": "npx cap open ios",
+    "run-ios": "npx cap run ios",
+    "res-ios": "cordova-res ios --skip-config --copy"
+
   },
   "dependencies": {
     "@capacitor/android": "^3.4.0",
-    "@capacitor/core": "^3.4.0"
+    "@capacitor/core": "^3.4.0",
+    "@capacitor/ios": "^3.4.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^3.4.0"
