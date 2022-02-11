@@ -7,9 +7,11 @@
   "license": "MIT",
   "scripts": {
     "serve": "live-server ./dist",
+    "add-android": "npx cap add android",
     "sync-android": "npx cap sync android",
     "open-android": "npx cap open android",
     "res-android": "cordova-res android --skip-config --copy",
+    "add-ios": "npx cap add ios",
     "open-ios": "npx cap open ios",
     "run-ios": "npx cap run ios",
     "res-ios": "cordova-res ios --skip-config --copy"
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^3.4.0",
-    "cordova-res": "^0.15.4"
+    "cordova-res": "^0.15.4",
+    "live-server": "^1.2.1"
   }
 }
