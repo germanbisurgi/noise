@@ -6,6 +6,7 @@
   "author": "g.bisurgi <g.bisurgi@herzogkommunikation.de>",
   "license": "MIT",
   "scripts": {
+    "dev": "npm run serve",
     "serve": "live-server ./dist",
     "add-android": "npx cap add android",
     "sync-android": "npx cap sync android",

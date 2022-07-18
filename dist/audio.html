@@ -9,6 +9,7 @@
 </head>
 <body>
 <div id="app">
+    <img class="woods" src="./assets/images/woods.png" alt="wods">
     <div class="container">
         <div class="loading" :class="{ visible: loader.loading() }" v-if="loader">
             <p class="loading-progress"> {{ loader.getProgress() }}%</p>
